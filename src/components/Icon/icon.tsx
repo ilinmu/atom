@@ -68,7 +68,7 @@ const Icon: React.FC<IconProps> = ({
   if (SvgIcon) {
     return <SvgIcon {...rest} />;
   }
-  return '123';
+  return null;
 };
 
 export default Icon;
