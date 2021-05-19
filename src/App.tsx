@@ -1,10 +1,29 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Button, { ButtonType, ButtonSize } from './components/Button/button';
 import Alert, { AlertType } from './components/Alert/alert';
+import Icon from './components/Icon/icon';
 
 function App() {
+  const handleOnCompleted = useCallback(
+    (iconName) => console.log(`${iconName} successfully loaded`),
+    []
+  );
+
+  const handleIconError = useCallback((err) => console.error(err.message), []);
+
   return (
     <div className="App">
+    <Icon
+      name="arrow-down"
+      onCompleted={handleOnCompleted}
+      onError={handleIconError}
+      onClick={() => alert('1')}
+    />
+    <Icon
+      name="arrow-up"
+      onCompleted={handleOnCompleted}
+      onError={handleIconError}
+    />
       <Alert
         type={AlertType.SUCCESS}
         title="测试标题一"
