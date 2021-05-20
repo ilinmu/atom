@@ -2,6 +2,8 @@ import React, { useCallback } from 'react';
 import Button, { ButtonType, ButtonSize } from './components/Button/button';
 import Alert, { AlertType } from './components/Alert/alert';
 import Icon from './components/Icon/icon';
+import Menu from './components/Menu/menu';
+import MenuItem from './components/Menu/menuItem';
 
 function App() {
   const handleOnCompleted = useCallback(
@@ -13,17 +15,39 @@ function App() {
 
   return (
     <div className="App">
-    <Icon
-      name="arrow-down"
-      onCompleted={handleOnCompleted}
-      onError={handleIconError}
-      onClick={() => alert('1')}
-    />
-    <Icon
-      name="arrow-up"
-      onCompleted={handleOnCompleted}
-      onError={handleIconError}
-    />
+      <Menu
+        defaultSelected={0}
+        onSelect={(index: number) => alert(index)}
+        mode="horizontal"
+      >
+        <MenuItem
+          index={0}
+        >
+          123
+        </MenuItem>
+        <MenuItem
+          index={1}
+          disabled
+        >
+          456
+        </MenuItem>
+        <MenuItem
+          index={2}
+        >
+          789
+        </MenuItem>
+      </Menu>
+      <Icon
+        name="arrow-down"
+        onCompleted={handleOnCompleted}
+        onError={handleIconError}
+        onClick={() => alert('1')}
+      />
+      <Icon
+        name="arrow-up"
+        onCompleted={handleOnCompleted}
+        onError={handleIconError}
+      />
       <Alert
         type={AlertType.SUCCESS}
         title="测试标题一"
