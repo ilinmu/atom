@@ -4,6 +4,7 @@ import Alert, { AlertType } from './components/Alert/alert';
 import Icon from './components/Icon/icon';
 import Menu from './components/Menu/menu';
 import MenuItem from './components/Menu/menuItem';
+import SubMenu from './components/Menu/subMenu';
 
 function App() {
   const handleOnCompleted = useCallback(
@@ -16,26 +17,42 @@ function App() {
   return (
     <div className="App">
       <Menu
-        defaultSelected={0}
-        onSelect={(index: number) => alert(index)}
+        onSelect={(index: string) => alert(index)}
         mode="horizontal"
       >
+        <MenuItem>123</MenuItem>
         <MenuItem
-          index={0}
-        >
-          123
-        </MenuItem>
-        <MenuItem
-          index={1}
           disabled
         >
           456
         </MenuItem>
+        <SubMenu title="subMenu">
+          <MenuItem>SubMenu 1</MenuItem>
+          <MenuItem>SubMenu 2</MenuItem>
+          <MenuItem>SubMenu 3</MenuItem>
+        </SubMenu>
         <MenuItem
-          index={2}
         >
           789
         </MenuItem>
+      </Menu>
+      <Menu
+        onSelect={(index: string) => alert(index)}
+        defaultOpenSubMenu={['2']}
+        mode="vertical"
+      >
+        <MenuItem>123</MenuItem>
+        <MenuItem
+          disabled
+        >
+          456
+        </MenuItem>
+        <SubMenu title="subMenu">
+          <MenuItem>SubMenu 1</MenuItem>
+          <MenuItem>SubMenu 2</MenuItem>
+          <MenuItem>SubMenu 3</MenuItem>
+        </SubMenu>
+        <MenuItem>789</MenuItem>
       </Menu>
       <Icon
         name="arrow-down"
