@@ -3,6 +3,7 @@ import Button, { ButtonType, ButtonSize } from './components/Button/button';
 import Alert, { AlertType } from './components/Alert/alert';
 import Icon from './components/Icon/icon';
 import Menu, { MenuItem, SubMenu } from './components/Menu/menu';
+import Tabs, { TabPane } from './components/Tabs/tabs';
 
 function App() {
   const handleOnCompleted = useCallback(
@@ -14,6 +15,32 @@ function App() {
 
   return (
     <div className="App">
+      <Tabs
+        defaultActiveKey={0}
+        onChange={(index: number) => alert(index)}
+      >
+        <TabPane title="TabPane0">
+          这里是内容0
+        </TabPane>
+        <TabPane title="TabPane1" disabled>
+          这里是内容1
+        </TabPane>
+        <TabPane title="TabPane1">
+          这里是内容1
+        </TabPane>
+      </Tabs>
+      <Tabs
+        mode="vertical"
+        defaultActiveKey={0}
+        onChange={(index: number) => alert(index)}
+      >
+        <TabPane index={0} title="TabPane0">
+          这里是内容0
+        </TabPane>
+        <TabPane index={1} title="TabPane1">
+          这里是内容1
+        </TabPane>
+      </Tabs>
       <Menu
         onSelect={(index: string) => alert(index)}
         mode="horizontal"
