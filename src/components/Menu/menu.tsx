@@ -1,7 +1,8 @@
 import React, { useState, createContext } from 'react';
 import classNames from 'classnames';
 
-import { MenuItemProps } from './menuItem';
+import MenuItemComponent, { MenuItemProps } from './menuItem';
+import SubMenuComponent, { SubMenuProps } from './subMenu';
 
 type ModeType = 'vertical' | 'horizontal';
 type SelectCallback = (selectedIndex: string) => void;
@@ -58,7 +59,7 @@ const Menu: React.FC<MenuProps> = (props) => {
 
   const renderChildren = () => {
     return React.Children.map(children, (child, index) => {
-      const childElemet = child as React.FunctionComponentElement<MenuItemProps>;
+      const childElemet = child as React.FunctionComponentElement<MenuItemProps | SubMenuProps>;
       const { displayName } = childElemet.type;
       if (displayName === 'MenuItem' || displayName === 'SubMenu') {
         return React.cloneElement(childElemet, {
@@ -89,4 +90,6 @@ Menu.defaultProps = {
   defaultOpenSubMenu: [],
 }
 
+export const MenuItem: React.FC<MenuItemProps> = MenuItemComponent;
+export const SubMenu: React.FC<SubMenuProps> = SubMenuComponent;
 export default Menu;

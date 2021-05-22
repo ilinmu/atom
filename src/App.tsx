@@ -2,9 +2,7 @@ import React, { useCallback } from 'react';
 import Button, { ButtonType, ButtonSize } from './components/Button/button';
 import Alert, { AlertType } from './components/Alert/alert';
 import Icon from './components/Icon/icon';
-import Menu from './components/Menu/menu';
-import MenuItem from './components/Menu/menuItem';
-import SubMenu from './components/Menu/subMenu';
+import Menu, { MenuItem, SubMenu } from './components/Menu/menu';
 
 function App() {
   const handleOnCompleted = useCallback(
