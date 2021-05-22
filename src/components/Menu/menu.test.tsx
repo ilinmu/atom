@@ -1,20 +1,20 @@
 import React from 'react';
 import { fireEvent, render, RenderResult, cleanup, waitFor } from '@testing-library/react';
 
-import Menu, { MenuProps } from './menu';
+import Menu, { MenuProps, ModeType } from './menu';
 import MenuItem from './menuItem';
 import SubMenu from './subMenu';
-import { title } from 'process';
 
 const defaultProps: MenuProps = {
   defaultSelected: '0',
   className: 'test',
+  mode: ModeType.VERTICAL,
   onSelect: jest.fn(),
 }
 
 const vertivalProps: MenuProps = {
   defaultSelected: '0',
-  mode: 'vertical',
+  mode: ModeType.VERTICAL,
 }
 
 const generateMenu = (props: MenuProps) => {

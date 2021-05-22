@@ -1,7 +1,7 @@
 import React, { useState, useContext } from 'react';
 import classNames from 'classnames';
 
-import { MenuContext } from './menu';
+import { MenuContext, ModeType } from './menu';
 import { MenuItemProps } from './menuItem';
 
 export interface SubMenuProps {
@@ -43,10 +43,10 @@ const SubMenu: React.FC<SubMenuProps> = (props) => {
     }, 300);
   }
 
-  const clickEvent = context.mode === 'vertical'
+  const clickEvent = context.mode === ModeType.VERTICAL
     ? { onClick: handleClick }
     : {}
-  const hoverEvent = context.mode === 'horizontal'
+  const hoverEvent = context.mode === ModeType.HORIZONTAL
     ? {
       onMouseEnter: (e: React.MouseEvent) => { handleMouse(e, true) },
       onMouseLeave: (e: React.MouseEvent) => { handleMouse(e, false) },

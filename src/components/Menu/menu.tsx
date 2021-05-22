@@ -4,7 +4,11 @@ import classNames from 'classnames';
 import MenuItemComponent, { MenuItemProps } from './menuItem';
 import SubMenuComponent, { SubMenuProps } from './subMenu';
 
-type ModeType = 'vertical' | 'horizontal';
+export enum ModeType {
+  VERTICAL = 'vertical',
+  HORIZONTAL = 'horizontal',
+}
+
 type SelectCallback = (selectedIndex: string) => void;
 
 export interface MenuProps {
@@ -39,8 +43,8 @@ const Menu: React.FC<MenuProps> = (props) => {
   } = props;
   const [active, setActive] = useState(defaultSelected);
   const classes = classNames('menu', className, {
-    'menu-vertical': mode === 'vertical',
-    'menu-horizontal': mode === 'horizontal',
+    'menu-vertical': mode === ModeType.VERTICAL,
+    'menu-horizontal': mode === ModeType.HORIZONTAL,
   });
 
   const handleClick = (index: string) => {
@@ -59,10 +63,10 @@ const Menu: React.FC<MenuProps> = (props) => {
 
   const renderChildren = () => {
     return React.Children.map(children, (child, index) => {
-      const childElemet = child as React.FunctionComponentElement<MenuItemProps | SubMenuProps>;
-      const { displayName } = childElemet.type;
+      const childElement = child as React.FunctionComponentElement<MenuItemProps | SubMenuProps>;
+      const { displayName } = childElement.type;
       if (displayName === 'MenuItem' || displayName === 'SubMenu') {
-        return React.cloneElement(childElemet, {
+        return React.cloneElement(childElement, {
           index: index.toString()
         });
       } else {
@@ -86,7 +90,7 @@ const Menu: React.FC<MenuProps> = (props) => {
 
 Menu.defaultProps = {
   defaultSelected: '0',
-  mode: 'horizontal',
+  mode: ModeType.VERTICAL,
   defaultOpenSubMenu: [],
 }
 
