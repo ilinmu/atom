@@ -28,9 +28,7 @@ const TabPane: React.FC<TabPaneProps> = (props) => {
       key={index}
       className={classes}
     >
-      <div className="tabs-tabPane-content">
-        {children}
-      </div>
+      {children}
     </li>
   );
 }

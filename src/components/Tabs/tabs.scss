@@ -25,6 +25,7 @@
     padding: $menu-item-padding-y $menu-item-padding-x;
   }
   .tabs-title { 
+    list-style: none;
     padding: $menu-item-padding-y $menu-item-padding-x;
     cursor: pointer;
     &.active {

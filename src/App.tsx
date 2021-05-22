@@ -2,8 +2,8 @@ import React, { useCallback } from 'react';
 import Button, { ButtonType, ButtonSize } from './components/Button/button';
 import Alert, { AlertType } from './components/Alert/alert';
 import Icon from './components/Icon/icon';
-import Menu, { MenuItem, SubMenu } from './components/Menu/menu';
-import Tabs, { TabPane } from './components/Tabs/tabs';
+import Menu, { MenuItem, ModeType, SubMenu } from './components/Menu/menu';
+import Tabs, { TabPane, ModeType as TabsModeType } from './components/Tabs/tabs';
 
 function App() {
   const handleOnCompleted = useCallback(
@@ -25,12 +25,12 @@ function App() {
         <TabPane title="TabPane1" disabled>
           这里是内容1
         </TabPane>
-        <TabPane title="TabPane1">
-          这里是内容1
+        <TabPane title="TabPane2">
+          这里是内容2
         </TabPane>
       </Tabs>
       <Tabs
-        mode="vertical"
+        mode={TabsModeType.VERTICAL}
         defaultActiveKey={0}
         onChange={(index: number) => alert(index)}
       >
@@ -43,7 +43,7 @@ function App() {
       </Tabs>
       <Menu
         onSelect={(index: string) => alert(index)}
-        mode="horizontal"
+        mode={ModeType.HORIZONTAL}
       >
         <MenuItem>123</MenuItem>
         <MenuItem
@@ -64,7 +64,7 @@ function App() {
       <Menu
         onSelect={(index: string) => alert(index)}
         defaultOpenSubMenu={['2']}
-        mode="vertical"
+        mode={ModeType.VERTICAL}
       >
         <MenuItem>123</MenuItem>
         <MenuItem

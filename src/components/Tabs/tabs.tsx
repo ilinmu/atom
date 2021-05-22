@@ -2,11 +2,15 @@ import React, { useState, createContext } from 'react';
 import classNames from 'classnames';
 
 import TabPaneComponent, { TabPaneProps } from './tabPane';
-type TabsMode = 'vertical' | 'horizontal';
+
+export enum ModeType {
+  VERTICAL = 'vertical',
+  HORIZONTAL = 'horizontal',
+}
 
 export interface TabsProps {
   className?: string;
-  mode?: TabsMode;
+  mode?: ModeType;
   defaultActiveKey?: number;
   onChange?: (tabKey: number) => void;
 }
@@ -30,7 +34,7 @@ const Tabs: React.FC<TabsProps> = (props) => {
   } = props;
   const [active, setActive] = useState(defaultActiveKey);
   const classes = classNames('tabs', className, {
-    'vertical': mode === 'vertical',
+    'vertical': mode === ModeType.VERTICAL,
   });
   const handleTitleClick = (index: number) => {
     setActive(index);
@@ -49,9 +53,9 @@ const Tabs: React.FC<TabsProps> = (props) => {
       'disabled': disabled,
     });
     return (
-      <div className={titleClasses} onClick={() => handleTitleClick(index)}>
+      <li className={titleClasses} onClick={() => handleTitleClick(index)}>
         {title}
-      </div>
+      </li>
     );
   });
 
@@ -73,7 +77,7 @@ const Tabs: React.FC<TabsProps> = (props) => {
   }
 
   return (
-    <div className={classes}>
+    <div className={classes} data-testid="test-tabs">
       <ul className="tabs-titles">
         {titleList()}
       </ul>
