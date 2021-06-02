@@ -4,6 +4,7 @@ import Alert, { AlertType } from './components/Alert/alert';
 import Icon from './components/Icon/icon';
 import Menu, { MenuItem, ModeType, SubMenu } from './components/Menu/menu';
 import Tabs, { TabPane, ModeType as TabsModeType } from './components/Tabs/tabs';
+import Input, {InputSize} from './components/Input/input';
 
 function App() {
   const handleOnCompleted = useCallback(
@@ -13,8 +14,24 @@ function App() {
 
   const handleIconError = useCallback((err) => console.error(err.message), []);
 
+  const prefixIcon = (
+    <Icon
+      name="arrow-up"
+      onCompleted={handleOnCompleted}
+      onError={handleIconError}
+    />
+  );
+
   return (
     <div className="App">
+      <Input
+        className="test-input"
+        size={InputSize.Large}
+        prefix={prefixIcon}
+        suffix={prefixIcon}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => alert(event.target.value)}
+        defaultValue="123"
+      />
       <Tabs
         defaultActiveKey={0}
         onChange={(index: number) => alert(index)}
