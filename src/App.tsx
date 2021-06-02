@@ -29,8 +29,9 @@ function App() {
         size={InputSize.Large}
         prefix={prefixIcon}
         suffix={prefixIcon}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => alert(event.target.value)}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => console.log(event.target.value)}
         defaultValue="123"
+        onPressEnter={(value: string) => console.log(value)}
       />
       <Tabs
         defaultActiveKey={0}
