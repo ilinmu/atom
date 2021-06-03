@@ -4,13 +4,14 @@ import classNames from 'classnames';
 export enum InputSize {
   Large = 'lg',
   Small = 'sl',
+  Default = 'dt',
 }
 
 interface BaseInputProps {
   className?: string;
   disabled?: boolean;
-  prefix?: React.ReactNode;
-  suffix?: React.ReactNode;
+  prefix?: string | React.ReactNode;
+  suffix?: string | React.ReactNode;
   size?: InputSize;
   onPressEnter?: (value: string) => void;
   // onPressEnter?: () => void;
@@ -18,9 +19,9 @@ interface BaseInputProps {
 
 type removeProps = 'size' | 'prefix';
 
-type NativeButtonProps = BaseInputProps & Omit<React.InputHTMLAttributes<HTMLElement>, removeProps>;
+export type NativeInputProps = BaseInputProps & Omit<React.InputHTMLAttributes<HTMLElement>, removeProps>;
 
-const Input: React.FC<NativeButtonProps> = (props) => {
+const Input: React.FC<NativeInputProps> = (props) => {
   const {
     className,
     disabled,
@@ -37,12 +38,12 @@ const Input: React.FC<NativeButtonProps> = (props) => {
   })
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.code === 'Enter' && onPressEnter) {
+    if (event.code === 'Enter' && onPressEnter && !disabled) {
       onPressEnter(event.currentTarget.value);
     }
   }
   return (
-    <div className={classes}>
+    <div className={classes} data-testid="test-input">
       {prefix}
       <input
         disabled={disabled}
@@ -57,6 +58,9 @@ const Input: React.FC<NativeButtonProps> = (props) => {
 }
 
 Input.defaultProps = {
+  className: '',
+  size: InputSize.Large,
+  disabled: false,
 }
 
 export default Input;
