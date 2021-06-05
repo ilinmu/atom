@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, ChangeEvent, KeyboardEvent, InputHTMLAttributes } from 'react';
 import classNames from 'classnames';
 
 export enum InputSize {
@@ -7,19 +7,17 @@ export enum InputSize {
   Default = 'dt',
 }
 
-interface BaseInputProps {
+type removeProps = 'size' | 'prefix';
+export interface InputProps extends Omit<InputHTMLAttributes<HTMLElement>, removeProps> {
+  
   className?: string;
   disabled?: boolean;
   prefix?: string | React.ReactNode;
   suffix?: string | React.ReactNode;
   size?: InputSize;
+  onChange? : (event: ChangeEvent<HTMLInputElement>) => void;
   onPressEnter?: (value: string) => void;
-  // onPressEnter?: () => void;
 }
-
-type removeProps = 'size' | 'prefix';
-
-export type InputProps = BaseInputProps & Omit<React.InputHTMLAttributes<HTMLElement>, removeProps>;
 
 const Input: React.FC<InputProps> = (props) => {
   const {
@@ -40,14 +38,14 @@ const Input: React.FC<InputProps> = (props) => {
     'disabled': disabled,
   })
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.code === 'Enter' && onPressEnter && !disabled) {
       onPressEnter(event.currentTarget.value);
     }
   }
 
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.currentTarget.value);
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    setInputValue(event.target.value);
     onChange && onChange(event);
   }
 
