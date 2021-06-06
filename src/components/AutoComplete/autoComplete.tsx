@@ -25,10 +25,18 @@ const AutoComplete: FC<AutoCompleteProps> = (props) => {
     setSuggestions(result);
   }
 
+  const handleItemClick = (item: string) => {
+    setInputValue(item);
+    setSuggestions([]);
+    if (onSelect) {
+      onSelect(item);
+    }
+  }
+
   const generateSuggestion = () => {
     const suggestionList = suggestions.map((item, index) => {
       return (
-        <li key={index}>
+        <li key={index} onClick={() => handleItemClick(item)}>
           {item}
         </li>
       );
@@ -47,7 +55,7 @@ const AutoComplete: FC<AutoCompleteProps> = (props) => {
         onChange={handleInputChange}
         {...restProps}
       />
-      {generateSuggestion()}
+      {suggestions.length > 0 && generateSuggestion()}
     </div>
   )
 }

@@ -1,4 +1,4 @@
-import React, { useState, ChangeEvent, KeyboardEvent, InputHTMLAttributes } from 'react';
+import React, { ChangeEvent, KeyboardEvent, InputHTMLAttributes } from 'react';
 import classNames from 'classnames';
 
 export enum InputSize {
@@ -27,11 +27,9 @@ const Input: React.FC<InputProps> = (props) => {
     prefix,
     suffix,
     value,
-    onChange,
     onPressEnter,
     ...restProps
   } = props;
-  const [inputValue, setInputValue] = useState(value ?? '');
   const classes = classNames('input-wrap', className, {
     [`input-${size}`]: size,
     'disabled': disabled,
@@ -43,19 +41,12 @@ const Input: React.FC<InputProps> = (props) => {
     }
   }
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setInputValue(event.target.value);
-    onChange && onChange(event);
-  }
-
   return (
     <div className={classes} data-testid="test-input">
       {prefix}
       <input
         disabled={disabled}
         onKeyDown={handleKeyDown}
-        onChange={handleInputChange}
-        value={inputValue}
         {...restProps}
       >
         {children}
