@@ -5,6 +5,7 @@ import Icon from './components/Icon/icon';
 import Menu, { MenuItem, ModeType, SubMenu } from './components/Menu/menu';
 import Tabs, { TabPane, ModeType as TabsModeType } from './components/Tabs/tabs';
 import Input, {InputSize} from './components/Input/input';
+import AutoComplete from './components/AutoComplete/autoComplete';
 
 function App() {
   const handleOnCompleted = useCallback(
@@ -22,8 +23,17 @@ function App() {
     />
   );
 
+  const fetchSuggestions = (value: string) => {
+    const data = ['abc', 'def', 'ghi', 'aaa', 'abb', 'ccc'];
+    return data.filter((item) => item.includes(value));
+  }
+
   return (
     <div className="App">
+      <AutoComplete
+        fetchSuggestions={fetchSuggestions}
+        onSelect={(value: string) => console.log(value)}
+      />
       <Input
         className="test-input"
         size={InputSize.Large}

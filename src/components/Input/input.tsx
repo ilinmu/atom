@@ -9,7 +9,6 @@ export enum InputSize {
 
 type removeProps = 'size' | 'prefix';
 export interface InputProps extends Omit<InputHTMLAttributes<HTMLElement>, removeProps> {
-  
   className?: string;
   disabled?: boolean;
   prefix?: string | React.ReactNode;
