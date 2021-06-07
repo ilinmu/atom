@@ -26,7 +26,6 @@ const Input: React.FC<InputProps> = (props) => {
     children,
     prefix,
     suffix,
-    value,
     onPressEnter,
     ...restProps
   } = props;
