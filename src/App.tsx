@@ -5,7 +5,7 @@ import Icon from './components/Icon/icon';
 import Menu, { MenuItem, ModeType, SubMenu } from './components/Menu/menu';
 import Tabs, { TabPane, ModeType as TabsModeType } from './components/Tabs/tabs';
 import Input, {InputSize} from './components/Input/input';
-import AutoComplete from './components/AutoComplete/autoComplete';
+import AutoComplete, { OptionDataType } from './components/AutoComplete/autoComplete';
 
 function App() {
   const handleOnCompleted = useCallback(
@@ -24,15 +24,37 @@ function App() {
   );
 
   const fetchSuggestions = (value: string) => {
-    const data = ['abc', 'def', 'ghi', 'aaa', 'abb', 'ccc'];
-    return data.filter((item) => item.includes(value));
+    const data = [
+      {
+        id: 1,
+        value: 'aaa',
+      },
+      {
+        id: 2,
+        value: 'def',
+      },
+      {
+        id: 3,
+        value: 'ghi',
+      },
+      {
+        id: 4,
+        value: 'abb',
+      },
+    ];
+    return data.filter((item) => item.value.includes(value));
+  }
+
+  const handleRenderOption = (item: OptionDataType) => {
+    return <div>*{item.value}</div>
   }
 
   return (
     <div className="App">
       <AutoComplete
         fetchSuggestions={fetchSuggestions}
-        onSelect={(value: string) => console.log(value)}
+        onSelect={(item: OptionDataType) => console.log(item)}
+        renderOption={handleRenderOption}
       />
       <Input
         className="test-input"
