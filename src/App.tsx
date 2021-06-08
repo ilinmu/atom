@@ -49,10 +49,17 @@ function App() {
     return <div>*{item.value}</div>
   }
 
+  const handleFetchUser = (query: string) => {
+    return fetch(`https://api.github.com/search/users?q=${query}`)
+      .then((response) => response.json())
+      .then(({ items }) => items.slice(0, 10).map((item: any) => ({value: item.login, ...item})));
+  }
+
   return (
     <div className="App">
       <AutoComplete
-        fetchSuggestions={fetchSuggestions}
+        // fetchSuggestions={fetchSuggestions}
+        fetchSuggestions={handleFetchUser}
         onSelect={(item: OptionDataType) => console.log(item)}
         renderOption={handleRenderOption}
       />

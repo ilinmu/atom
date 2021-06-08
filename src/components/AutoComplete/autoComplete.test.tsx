@@ -41,7 +41,25 @@ describe('test AutoComplete component', () => {
     expect(inputNode.value).toEqual('aaa');
   })
   it('should provide keyboard support', async () => {
-    
+    fireEvent.change(inputNode, { target: { value: 'a' } });
+    const first = wrapper.queryByText('aaa');
+    const second = wrapper.queryByText('abc');
+
+    fireEvent.keyDown(inputNode, { code: 'ArrowDown' });
+    expect(first).toHaveClass('active');
+    fireEvent.keyDown(inputNode, { code: 'ArrowDown' });
+    expect(first).not.toHaveClass('active');
+    expect(second).toHaveClass('active');
+
+    fireEvent.keyDown(inputNode, { code: 'ArrowUp' });
+    expect(second).not.toHaveClass('active');
+    expect(first).toHaveClass('active');
+
+    fireEvent.keyDown(inputNode, { code: 'Enter' });
+    expect(first).not.toBeInTheDocument();
+    expect(second).not.toBeInTheDocument();
+    expect(wrapper.container.querySelectorAll('.suggestion-item').length).toBe(0);
+    expect(inputNode.value).toEqual('aaa');
   })
   it('click outside should hide the dropdown', async () => {
 

@@ -1,6 +1,7 @@
 import React, { FC, useState, KeyboardEvent, ChangeEvent } from 'react';
 import classNames from 'classnames';
 import Input, { InputProps } from '../Input/input';
+import Icon from '../Icon/icon';
 
 interface OptionData {
   value: string;
@@ -8,7 +9,7 @@ interface OptionData {
 
 export type OptionDataType<T = {}> = T & OptionData;
 export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
-  fetchSuggestions: (string: string) => OptionDataType[];
+  fetchSuggestions: (string: string) => OptionDataType[] | Promise<OptionDataType[]>;
   onSelect?: (item: OptionDataType) => void;
   renderOption?: (item: OptionDataType) => React.ReactElement;
 }
@@ -28,11 +29,21 @@ const AutoComplete: FC<AutoCompleteProps> = (props) => {
 
   const [suggestions, setSuggestions] = useState<OptionDataType[]>([])
 
+  const [loading, setLoading] = useState(false);
+
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.trim();
     setInputValue(value);
     const result = value ? fetchSuggestions(value) : [];
-    setSuggestions(result);
+    if (result instanceof Promise) {
+      setLoading(true);
+      result.then((list) => {
+        setSuggestions(list);
+        setLoading(false);
+      });
+    } else {
+      setSuggestions(result);
+    }
   }
 
   const handleItemClick = (item: OptionDataType) => {
@@ -98,6 +109,7 @@ const AutoComplete: FC<AutoCompleteProps> = (props) => {
         onKeyDown={handleKeyDown}
         {...restProps}
       />
+      {loading && <Icon name="reload" />}
       {suggestions.length > 0 && generateSuggestion()}
     </div>
   )
