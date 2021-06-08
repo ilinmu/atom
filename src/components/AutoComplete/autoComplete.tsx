@@ -74,7 +74,7 @@ const AutoComplete: FC<AutoCompleteProps> = (props) => {
 
   const generateSuggestion = () => {
     const suggestionList = suggestions.map((item, index) => {
-      const liClasses = classNames({
+      const liClasses = classNames('suggestion-item', {
         'active': highlight === index,
       })
       return (
