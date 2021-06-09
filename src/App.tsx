@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import Button, { ButtonType, ButtonSize } from './components/Button/button';
 import Alert, { AlertType } from './components/Alert/alert';
 import Icon from './components/Icon/icon';
@@ -55,8 +55,20 @@ function App() {
       .then(({ items }) => items.slice(0, 10).map((item: any) => ({value: item.login, ...item})));
   }
 
+  const [value, setValue] = useState('');
+  const [count, setCount] = useState(0);
+  useEffect(() => {
+    console.warn('update');
+    document.title = `You clicked ${count} times`;
+    return (): void => {
+      console.warn('useEffect return', count);
+    };
+  }, [count]);
+  console.warn('value', value);
+
   return (
     <div className="App">
+      <Button onClick={() => setCount(count + 1)}>click</Button>
       <AutoComplete
         // fetchSuggestions={fetchSuggestions}
         fetchSuggestions={handleFetchUser}
@@ -68,7 +80,7 @@ function App() {
         size={InputSize.Large}
         prefix={prefixIcon}
         suffix={prefixIcon}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => console.log(event.target.value)}
+        onChange={(event: React.ChangeEvent<HTMLInputElement>) => setValue(event.target.value)}
         onPressEnter={(value: string) => console.log(value)}
       />
       <Tabs

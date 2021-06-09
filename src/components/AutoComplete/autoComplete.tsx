@@ -1,8 +1,8 @@
-import React, { FC, useState, KeyboardEvent, ChangeEvent } from 'react';
+import React, { FC, useState, KeyboardEvent, ChangeEvent, useEffect } from 'react';
 import classNames from 'classnames';
 import Input, { InputProps } from '../Input/input';
 import Icon from '../Icon/icon';
-
+import useDebounce from '../../hooks/useDebounce';
 interface OptionData {
   value: string;
 }
@@ -23,7 +23,7 @@ const AutoComplete: FC<AutoCompleteProps> = (props) => {
     ...restProps
   } = props;
 
-  const [inputValue, setInputValue] = useState(value ?? '');
+  const [inputValue, setInputValue] = useState(value as string ?? '');
 
   const [highlight, setHighlight] = useState(-1);
 
@@ -31,10 +31,10 @@ const AutoComplete: FC<AutoCompleteProps> = (props) => {
 
   const [loading, setLoading] = useState(false);
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value.trim();
-    setInputValue(value);
-    const result = value ? fetchSuggestions(value) : [];
+  const debounceValue = useDebounce(inputValue, 500);
+
+  useEffect(() => {
+    const result = debounceValue ? fetchSuggestions(debounceValue) : [];
     if (result instanceof Promise) {
       setLoading(true);
       result.then((list) => {
@@ -44,6 +44,11 @@ const AutoComplete: FC<AutoCompleteProps> = (props) => {
     } else {
       setSuggestions(result);
     }
+  }, [debounceValue, fetchSuggestions]);
+
+  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value.trim();
+    setInputValue(value);
   }
 
   const handleItemClick = (item: OptionDataType) => {
