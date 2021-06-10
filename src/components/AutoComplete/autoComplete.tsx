@@ -70,7 +70,9 @@ const AutoComplete: FC<AutoCompleteProps> = (props) => {
         newHighlight = highlight - 1;
         break;
       case 'Enter':
-        handleItemClick(suggestions[newHighlight]);
+        if (suggestions.length) {
+          handleItemClick(suggestions[newHighlight]);
+        }
         break;
       default:
         break;
