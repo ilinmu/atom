@@ -1,4 +1,4 @@
-import React, { FC, useState, KeyboardEvent, ChangeEvent, useEffect } from 'react';
+import React, { FC, useState, KeyboardEvent, ChangeEvent, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import Input, { InputProps } from '../Input/input';
 import Icon from '../Icon/icon';
@@ -33,22 +33,29 @@ const AutoComplete: FC<AutoCompleteProps> = (props) => {
 
   const debounceValue = useDebounce(inputValue, 500);
 
+  const triggerSearch = useRef(false);
+
   useEffect(() => {
-    const result = debounceValue ? fetchSuggestions(debounceValue) : [];
-    if (result instanceof Promise) {
-      setLoading(true);
-      result.then((list) => {
-        setSuggestions(list);
-        setLoading(false);
-      });
+    if (debounceValue && triggerSearch.current) {
+      const results = fetchSuggestions(debounceValue);
+      if (results instanceof Promise) {
+        setLoading(true);
+        results.then((list) => {
+          setSuggestions(list);
+          setLoading(false);
+        })
+      } else {
+        setSuggestions(results);
+      }
     } else {
-      setSuggestions(result);
+      setSuggestions([])
     }
   }, [debounceValue, fetchSuggestions]);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value.trim();
     setInputValue(value);
+    triggerSearch.current = true;
   }
 
   const handleItemClick = (item: OptionDataType) => {
@@ -57,6 +64,7 @@ const AutoComplete: FC<AutoCompleteProps> = (props) => {
     if (onSelect) {
       onSelect(item);
     }
+    triggerSearch.current = false;
   }
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
