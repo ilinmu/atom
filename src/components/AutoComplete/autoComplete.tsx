@@ -3,6 +3,7 @@ import classNames from 'classnames';
 import Input, { InputProps } from '../Input/input';
 import Icon from '../Icon/icon';
 import useDebounce from '../../hooks/useDebounce';
+import useClickOutside from '../../hooks/useClickOutside';
 interface OptionData {
   value: string;
 }
@@ -35,6 +36,13 @@ const AutoComplete: FC<AutoCompleteProps> = (props) => {
 
   const triggerSearch = useRef(false);
 
+  const componentRef = useRef<HTMLDivElement>(null);
+
+  useClickOutside(componentRef, () => {
+    setSuggestions([]);
+  })
+
+
   useEffect(() => {
     if (debounceValue && triggerSearch.current) {
       const results = fetchSuggestions(debounceValue);
@@ -48,7 +56,7 @@ const AutoComplete: FC<AutoCompleteProps> = (props) => {
         setSuggestions(results);
       }
     } else {
-      setSuggestions([])
+      setSuggestions([]);
     }
   }, [debounceValue, fetchSuggestions]);
 
@@ -117,7 +125,7 @@ const AutoComplete: FC<AutoCompleteProps> = (props) => {
   }
 
   return (
-    <div className="autocomlete">
+    <div className="autocomlete" ref={componentRef}>
       <Input
         value={inputValue}
         onChange={handleInputChange}
