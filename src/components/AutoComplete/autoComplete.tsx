@@ -42,7 +42,6 @@ const AutoComplete: FC<AutoCompleteProps> = (props) => {
     setSuggestions([]);
   })
 
-
   useEffect(() => {
     if (debounceValue && triggerSearch.current) {
       const results = fetchSuggestions(debounceValue);
