@@ -39,8 +39,11 @@ const Select: FC<SelectProps> = (props) => {
   const handleSelect = (item: OptionDataType) => {
     let newSelected = [];
     if (multiple) {
-      const setSelected = new Set(selected.concat(item.value));
-      newSelected = [...setSelected];
+      if (selected.includes(item.value)) {
+        newSelected = selected.filter((child) => child !== item.value);
+      } else {
+        newSelected = selected.concat(item.value);
+      }
     } else {
       newSelected = [item.value];
     }
