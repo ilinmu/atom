@@ -14,6 +14,7 @@ export interface SelectProps {
   size?: SelectSize;
   defaultValue?: string[];
   value?: string[];
+  multiple?: boolean;
   data: OptionDataType[];
   onChange: (item: OptionDataType, selected: string[]) => void;
   renderOption?: (item: OptionDataType) => React.ReactElement;
@@ -23,6 +24,7 @@ const Select: FC<SelectProps> = (props) => {
   const {
     data,
     value,
+    multiple,
     onChange,
     renderOption,
   } = props;
@@ -35,7 +37,13 @@ const Select: FC<SelectProps> = (props) => {
   }
 
   const handleSelect = (item: OptionDataType) => {
-    const newSelected = selected.concat(item.value);
+    let newSelected = [];
+    if (multiple) {
+      const setSelected = new Set(selected.concat(item.value));
+      newSelected = [...setSelected];
+    } else {
+      newSelected = [item.value];
+    }
     setSelected(newSelected);
     onChange(item, newSelected);
   }
@@ -68,6 +76,10 @@ const Select: FC<SelectProps> = (props) => {
       {generateOptions()}
     </div>
   )
+}
+
+Select.defaultProps = {
+  multiple: false,
 }
 
 export default Select;
