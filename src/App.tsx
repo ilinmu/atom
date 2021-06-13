@@ -6,6 +6,7 @@ import Menu, { MenuItem, ModeType, SubMenu } from './components/Menu/menu';
 import Tabs, { TabPane, ModeType as TabsModeType } from './components/Tabs/tabs';
 import Input, {InputSize} from './components/Input/input';
 import AutoComplete, { OptionDataType } from './components/AutoComplete/autoComplete';
+import Select from './components/Select/select';
 
 function App() {
   const handleOnCompleted = useCallback(
@@ -64,11 +65,37 @@ function App() {
       console.warn('useEffect return', count);
     };
   }, [count]);
-  console.warn('value', value);
+  
+  const selectData = [
+    {
+      id: 1,
+      name: '111',
+      value: '111',
+    },
+    {
+      id: 2,
+      name: '222',
+      value: '222',
+    },
+    {
+      id: 3,
+      name: '333',
+      value: '333',
+    },
+    {
+      id: 4,
+      name: '444',
+      value: '444',
+    },
+  ]
 
   return (
     <div className="App">
       <Button onClick={() => setCount(count + 1)}>click</Button>
+      <Select
+        data={selectData}
+        onChange={(item, value) => console.log(item, value)}
+      />
       <AutoComplete
         // fetchSuggestions={fetchSuggestions}
         fetchSuggestions={handleFetchUser}
