@@ -1,4 +1,6 @@
-import React, { FC, useState, useRef } from 'react';
+import React, { FC, KeyboardEvent, useState, useRef } from 'react';
+import classNames from 'classnames';
+import Input from '../Input/input';
 import useClickOutside from '../../hooks/useClickOutside';
 
 interface OptionDataType {
@@ -30,13 +32,47 @@ const Select: FC<SelectProps> = (props) => {
   } = props;
 
   const [selected, setSelected] = useState(value ?? []);
+  const [highlight, setHighlight] = useState(-1);
   const [showDropdown, setShowDropdown] = useState(false);
 
   const handleToggleDropdown = () => {
     setShowDropdown(true);
   }
 
-  const handleSelect = (item: OptionDataType) => {
+  const renderTemplate = (item: OptionDataType) => {
+    if (renderOption) {
+      return <li>{renderOption(item)}</li>;
+    }
+    return item.name
+  }
+
+  const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
+    const code = event.code;
+    console.warn('code', code);
+    let newHighlight = highlight;
+    switch (code) {
+      case 'ArrowDown':
+        newHighlight = highlight + 1;
+        break;
+      case 'ArrowUp':
+        newHighlight = highlight - 1;
+        break;
+      case 'Enter':
+        handleItemClick(data[newHighlight], newHighlight);
+        break;
+      default:
+        break;
+    }
+    if (newHighlight < 0) {
+      newHighlight = 0
+    }
+    if (newHighlight >= data.length) {
+      newHighlight = data.length - 1;
+    }
+    setHighlight(newHighlight);
+  }
+
+  const handleItemClick = (item: OptionDataType, index: number) => {
     let newSelected = [];
     if (multiple) {
       if (selected.includes(item.value)) {
@@ -49,14 +85,19 @@ const Select: FC<SelectProps> = (props) => {
     }
     setSelected(newSelected);
     onChange(item, newSelected);
+    setHighlight(index);
   }
 
   const generateOptions = () => {
     const renderResult = data.map((item, index) => {
-      if (renderOption) {
-        return renderOption(item);
-      }
-      return <li key={item.value} onClick={() => handleSelect(item)}>{item.name}</li>
+      const classes = classNames('select-item', {
+        active: highlight === index,
+      });
+      return (
+        <li className={classes} key={item.value} onClick={() => handleItemClick(item, index)}>
+          {renderTemplate(item)}
+        </li>
+      )
     });
     return (
       <ul style={{ display: showDropdown ? 'block' : 'none' }}>
@@ -73,9 +114,11 @@ const Select: FC<SelectProps> = (props) => {
 
   return (
     <div className="select-wrap" onClick={handleToggleDropdown} ref={componentRef}>
-      <div className="select">
-        <span>{selected.join(',')}</span>
-      </div>
+      <Input
+        className="select"
+        value={selected.join(',')}
+        onKeyDown={handleKeyDown}
+      />
       {generateOptions()}
     </div>
   )
