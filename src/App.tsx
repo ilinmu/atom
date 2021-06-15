@@ -96,6 +96,11 @@ function App() {
         data={selectData}
         onChange={(item, value) => console.log(item, value)}
       />
+      <Select
+        data={selectData}
+        onChange={(item, value) => console.log(item, value)}
+        multiple
+      />
       <AutoComplete
         // fetchSuggestions={fetchSuggestions}
         fetchSuggestions={handleFetchUser}

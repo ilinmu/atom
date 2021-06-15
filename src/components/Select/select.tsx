@@ -48,8 +48,8 @@ const Select: FC<SelectProps> = (props) => {
 
   const handleKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     const code = event.code;
-    console.warn('code', code);
     let newHighlight = highlight;
+    const item = data[newHighlight];
     switch (code) {
       case 'ArrowDown':
         newHighlight = highlight + 1;
@@ -58,7 +58,10 @@ const Select: FC<SelectProps> = (props) => {
         newHighlight = highlight - 1;
         break;
       case 'Enter':
-        handleItemClick(data[newHighlight], newHighlight);
+        handleItemClick(item, newHighlight);
+        break;
+      case 'Backspace':
+        handleRemoveItem();
         break;
       default:
         break;
@@ -70,6 +73,13 @@ const Select: FC<SelectProps> = (props) => {
       newHighlight = data.length - 1;
     }
     setHighlight(newHighlight);
+  }
+
+  const handleRemoveItem = () => {
+    if (selected.length) {
+      setSelected(selected.slice(0, selected.length -1));
+      setHighlight(-1);
+    }
   }
 
   const handleItemClick = (item: OptionDataType, index: number) => {
