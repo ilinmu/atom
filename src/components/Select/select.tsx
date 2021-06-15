@@ -77,8 +77,15 @@ const Select: FC<SelectProps> = (props) => {
 
   const handleRemoveItem = () => {
     if (selected.length) {
-      setSelected(selected.slice(0, selected.length -1));
+      const lastIndex = selected.length - 1;
+      const lastValue = selected[lastIndex];
+      const item = data.filter((child) => child.value === lastValue);
+      const newSelected = selected.slice(0, lastIndex);
+      setSelected(newSelected);
       setHighlight(-1);
+      if (onChange) {
+        onChange(item[0], newSelected);
+      }
     }
   }
 
@@ -94,7 +101,9 @@ const Select: FC<SelectProps> = (props) => {
       newSelected = [item.value];
     }
     setSelected(newSelected);
-    onChange(item, newSelected);
+    if (onChange) {
+      onChange(item, newSelected);
+    }
     setHighlight(index);
   }
 
