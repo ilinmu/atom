@@ -1,4 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react';
+
 import Button, { ButtonType, ButtonSize } from './components/Button/button';
 import Alert, { AlertType } from './components/Alert/alert';
 import Icon from './components/Icon/icon';
@@ -7,6 +8,7 @@ import Tabs, { TabPane, ModeType as TabsModeType } from './components/Tabs/tabs'
 import Input, {InputSize} from './components/Input/input';
 import AutoComplete, { OptionDataType } from './components/AutoComplete/autoComplete';
 import Select from './components/Select/select';
+import Upload from './components/Upload/upload';
 
 function App() {
   const handleOnCompleted = useCallback(
@@ -65,7 +67,7 @@ function App() {
       console.warn('useEffect return', count);
     };
   }, [count]);
-  
+
   const selectData = [
     {
       id: 1,
@@ -89,8 +91,29 @@ function App() {
     },
   ]
 
+  const handleUploadProgress = (percentage: number, file: File) => {
+    console.warn('percentage', percentage);
+    console.warn('file', file);
+  }
+
+  const handleUploadSuccess = (data: any, file: File) => {
+    console.warn('data', data);
+    console.warn('file', file);
+  }
+
+  const handleUploadError = (error: any, file: File) => {
+    console.warn('error', error);
+    console.warn('file', file);
+  }
+
   return (
     <div className="App">
+      <Upload
+        action="https://jsonplaceholder.typicode.com/posts/"
+        onProgress={handleUploadProgress}
+        onSuccess={handleUploadSuccess}
+        onError={handleUploadError}
+      />
       <Button onClick={() => setCount(count + 1)}>click</Button>
       <Select
         data={selectData}
