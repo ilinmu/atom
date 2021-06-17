@@ -9,6 +9,7 @@ export interface UploadProps {
   onProgress?: (percentage: number, file: File) => void;
   onSuccess?: (data: any, file: File) => void;
   onError?: (err: any, file: File) => void;
+  onChange?: (file: File) => void;
 }
 
 const Upload: FC<UploadProps> = (props) => {
@@ -18,6 +19,7 @@ const Upload: FC<UploadProps> = (props) => {
     onProgress,
     onSuccess,
     onError,
+    onChange,
   } = props;
   const inputComponent = useRef<HTMLInputElement>(null);
 
@@ -47,7 +49,7 @@ const Upload: FC<UploadProps> = (props) => {
         const result = beforeUpload(file);
         if (result && result instanceof Promise) {
           result.then((processedFile) => {
-            post(file);
+            post(processedFile);
           })
         } else if (result === true) {
           post(file);
@@ -75,9 +77,15 @@ const Upload: FC<UploadProps> = (props) => {
       if (onSuccess) {
         onSuccess(response.data, file);
       }
+      if (onChange) {
+        onChange(file);
+      }
     }).catch((error) => {
       if (onError) {
         onError(error, file);
+      }
+      if (onChange) {
+        onChange(file);
       }
     })
   }

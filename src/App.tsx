@@ -92,13 +92,16 @@ function App() {
   ];
 
   const handleBeforeUpload = (file: File) => {
+    // console.warn('handleBeforeUpload', file);
+    // if (file.size > 100) {
+    //   console.warn('file size is larger than 100');
+    // } else {
+    //   console.warn('file size is smaller than 100');
+    // }
+    // return true;
     console.warn('handleBeforeUpload', file);
-    if (file.size > 100) {
-      console.warn('file size is larger than 100');
-    } else {
-      console.warn('file size is smaller than 100');
-    }
-    return true;
+    const newFile = new File([file], `new_${file.name}`, { type: file.type });
+    return Promise.resolve(newFile);
   }
 
   const handleUploadProgress = (percentage: number, file: File) => {
@@ -116,6 +119,10 @@ function App() {
     console.warn('file', file);
   }
 
+  const handleFileChange = (file: File) => {
+    console.warn('handleFileChange', file);
+  }
+
   return (
     <div className="App">
       <Upload
@@ -124,6 +131,7 @@ function App() {
         onProgress={handleUploadProgress}
         onSuccess={handleUploadSuccess}
         onError={handleUploadError}
+        onChange={handleFileChange}
       />
       <Button onClick={() => setCount(count + 1)}>click</Button>
       <Select
