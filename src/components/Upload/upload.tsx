@@ -1,8 +1,19 @@
-import React, { FC, useRef, ChangeEvent } from 'react';
+import React, { FC, useState, useRef, ChangeEvent } from 'react';
 import axios from 'axios';
 
 import Button from '../Button/button';
 
+export type UploadFileStatus = 'ready' | 'uploading' | 'success' | 'fail';
+export interface UploadFile {
+  uid: string;
+  size: number;
+  name: string;
+  status?: UploadFileStatus;
+  percent?: number;
+  raw?: File;
+  response?: any;
+  error?: any;
+}
 export interface UploadProps {
   action: string;
   beforeUpload?: (file: File) => boolean | Promise<File>;
@@ -22,6 +33,8 @@ const Upload: FC<UploadProps> = (props) => {
     onChange,
   } = props;
   const inputComponent = useRef<HTMLInputElement>(null);
+
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
 
   const handleButtonClick = () => {
     if (inputComponent.current) {
@@ -58,8 +71,31 @@ const Upload: FC<UploadProps> = (props) => {
     })
   }
 
+  const updateFileList = (updateFile: UploadFile, updateObj: Partial<UploadFile>) => {
+    console.warn('updateFileList');
+    setFileList((prevFileList) => {
+      return prevFileList.map((file) => {
+        if (file.uid === updateFile.uid) {
+          return {
+            ...file,
+            ...updateObj,
+          };
+        }
+        return file;
+      });
+    })
+  }
+
   const post = (file: File) => {
     const formData = new FormData();
+    const _file: UploadFile = {
+      uid: `${new Date().getTime()}-upload-file`,
+      size: file.size,
+      name: file.name,
+      status: 'ready',
+      raw: file,
+    }
+    setFileList([_file, ...fileList]);
     formData.append(file.name, file);
     axios.post(action, formData, {
       headers: {
@@ -70,10 +106,18 @@ const Upload: FC<UploadProps> = (props) => {
         if (percentage < 100) {
           if (onProgress) {
             onProgress(percentage, file);
+            updateFileList(_file, {
+              status: 'uploading',
+              percent: percentage,
+            });
           }
         }
       }
     }).then((response) => {
+      updateFileList(_file, {
+        status: 'success',
+        response: response.data,
+      });
       if (onSuccess) {
         onSuccess(response.data, file);
       }
@@ -81,6 +125,10 @@ const Upload: FC<UploadProps> = (props) => {
         onChange(file);
       }
     }).catch((error) => {
+      updateFileList(_file, {
+        status: 'fail',
+        error: error,
+      });
       if (onError) {
         onError(error, file);
       }
@@ -89,6 +137,8 @@ const Upload: FC<UploadProps> = (props) => {
       }
     })
   }
+
+  console.warn('fileList', fileList);
 
   return (
     <div>
