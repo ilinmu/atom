@@ -5,6 +5,7 @@ import Button from '../Button/button';
 
 export interface UploadProps {
   action: string;
+  beforeUpload?: (file: File) => boolean | Promise<File>;
   onProgress?: (percentage: number, file: File) => void;
   onSuccess?: (data: any, file: File) => void;
   onError?: (err: any, file: File) => void;
@@ -13,6 +14,7 @@ export interface UploadProps {
 const Upload: FC<UploadProps> = (props) => {
   const {
     action,
+    beforeUpload,
     onProgress,
     onSuccess,
     onError,
@@ -39,30 +41,44 @@ const Upload: FC<UploadProps> = (props) => {
   const uploadFiles = (files: FileList) => {
     let postFiles = Array.from(files);
     postFiles.forEach((file) => {
-      const formData = new FormData();
-      formData.append(file.name, file);
-      axios.post(action, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-        onUploadProgress: (e) => {
-          let percentage = Math.round((e.loaded * 100) / e.total) || 0;
-          if (percentage < 100) {
-            if (onProgress) {
-              onProgress(percentage, file);
-            }
+      if (!beforeUpload) {
+        post(file);
+      } else {
+        const result = beforeUpload(file);
+        if (result && result instanceof Promise) {
+          result.then((processedFile) => {
+            post(file);
+          })
+        } else if (result === true) {
+          post(file);
+        }
+      }
+    })
+  }
+
+  const post = (file: File) => {
+    const formData = new FormData();
+    formData.append(file.name, file);
+    axios.post(action, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+      onUploadProgress: (e) => {
+        let percentage = Math.round((e.loaded * 100) / e.total) || 0;
+        if (percentage < 100) {
+          if (onProgress) {
+            onProgress(percentage, file);
           }
         }
-      }).then((response) => {
-        console.warn('response', response);
-        if (onSuccess) {
-          onSuccess(response.data, file);
-        }
-      }).catch((error) => {
-        if (onError) {
-          onError(error, file);
-        }
-      })
+      }
+    }).then((response) => {
+      if (onSuccess) {
+        onSuccess(response.data, file);
+      }
+    }).catch((error) => {
+      if (onError) {
+        onError(error, file);
+      }
     })
   }
 

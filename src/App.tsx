@@ -89,7 +89,17 @@ function App() {
       name: '444',
       value: '444',
     },
-  ]
+  ];
+
+  const handleBeforeUpload = (file: File) => {
+    console.warn('handleBeforeUpload', file);
+    if (file.size > 100) {
+      console.warn('file size is larger than 100');
+    } else {
+      console.warn('file size is smaller than 100');
+    }
+    return true;
+  }
 
   const handleUploadProgress = (percentage: number, file: File) => {
     console.warn('percentage', percentage);
@@ -109,7 +119,8 @@ function App() {
   return (
     <div className="App">
       <Upload
-        action="https://jsonplaceholder.typicode.com/posts/"
+        action="https://run.mocky.io/v3/331f73a8-6cf6-4cfb-bb87-07204835fb52"
+        beforeUpload={handleBeforeUpload}
         onProgress={handleUploadProgress}
         onSuccess={handleUploadSuccess}
         onError={handleUploadError}
