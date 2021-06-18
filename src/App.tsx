@@ -8,7 +8,7 @@ import Tabs, { TabPane, ModeType as TabsModeType } from './components/Tabs/tabs'
 import Input, {InputSize} from './components/Input/input';
 import AutoComplete, { OptionDataType } from './components/AutoComplete/autoComplete';
 import Select from './components/Select/select';
-import Upload from './components/Upload/upload';
+import Upload, { UploadFile } from './components/Upload/upload';
 
 function App() {
   const handleOnCompleted = useCallback(
@@ -123,6 +123,12 @@ function App() {
     console.warn('handleFileChange', file);
   }
 
+  const defaultFileList: UploadFile[] = [
+  { uid: '123', size: 1234, name: 'hello.md', status: 'uploading', percent: 30 },
+  { uid: '122', size: 1234, name: 'xyz.md', status: 'success', percent: 30 },
+  { uid: '121', size: 1234, name: 'eyiha.md', status: 'fail', percent: 30 }
+]
+
   return (
     <div className="App">
       <Upload
@@ -132,6 +138,7 @@ function App() {
         onSuccess={handleUploadSuccess}
         onError={handleUploadError}
         onChange={handleFileChange}
+        defaultFileList={defaultFileList}
       />
       <Button onClick={() => setCount(count + 1)}>click</Button>
       <Select
