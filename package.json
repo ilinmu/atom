@@ -1,7 +1,11 @@
 {
   "name": "atom",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
+  "author": "ilinmu",
+  "main": "dist/index.js",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -23,11 +27,14 @@
   "scripts": {
     "commit": "cz",
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "npm run clean && npm run build-ts && npm run build-css",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "format": "prettier --write src/**/*.ts{,x}",
-    "lint": "tsc --noEmit && eslint src/**/*.ts{,x}"
+    "lint": "tsc --noEmit && eslint src/**/*.ts{,x}",
+    "clean": "rimraf ./dist",
+    "build-ts": "tsc -p tsconfig.build.json",
+    "build-css": "sass ./src/styles/index.scss ./dist/index.css"
   },
   "eslintConfig": {
     "extends": [
@@ -62,7 +69,8 @@
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "7.21.5",
     "eslint-plugin-react-hooks": "1.7.0",
-    "prettier": "^2.3.0"
+    "prettier": "^2.3.0",
+    "rimraf": "^3.0.2"
   },
   "config": {
     "commitizen": {
