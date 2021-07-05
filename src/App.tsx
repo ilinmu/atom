@@ -1,6 +1,6 @@
 import React, { useCallback, useState, useEffect } from 'react';
 
-import Button, { ButtonType, ButtonSize } from './components/Button/button';
+import Button from './components/Button/button';
 import Alert, { AlertType } from './components/Alert/alert';
 import Icon from './components/Icon/icon';
 import Menu, { MenuItem, ModeType, SubMenu } from './components/Menu/menu';
@@ -261,30 +261,30 @@ function App() {
         onClose={() => alert('1')}
       />
       <Button
-        type={ButtonType.Primary}
-        size={ButtonSize.Large}
+        type="primary"
+        size="large"
         disabled
       > 
         Hello
       </Button>
       <Button
-        type={ButtonType.Danger}
-        size={ButtonSize.Small}
+        type="danger"
+        size="small"
         autoFocus
       > 
         Hello
       </Button>
       <Button
-        type={ButtonType.Link}
-        size={ButtonSize.Small}
+        type="link"
+        size="small"
         target="_blank"
         href="http://www.qq.com"
       > 
         QQ LINK
       </Button>
       <Button
-        type={ButtonType.Link}
-        size={ButtonSize.Small}
+        type="link"
+        size="small"
         href="http://www.qq.com"
         disabled
       > 

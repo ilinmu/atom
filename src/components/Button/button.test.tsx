@@ -1,20 +1,20 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import Button, { ButtonType, ButtonSize } from './button';
+import Button from './button';
 
 const defaultProps = {
   onClick:jest.fn(),
 }
 
 const differentProps = {
-  type: ButtonType.Primary,
-  size: ButtonSize.Large,
+  type: 'primary',
+  size: 'large',
   className: 'test-class',
   onClick:jest.fn(),
 }
 
 const linkProps = {
-  type: ButtonType.Link,
+  type: 'link',
   href: 'http://example.com',
 }
 
@@ -40,7 +40,7 @@ describe('Button Component', () => {
     const wrapper = render(<Button {...differentProps}>different props</Button>);
     const element = wrapper.getByText('different props') as HTMLButtonElement;
     expect(element).toBeInTheDocument();
-    expect(element).toHaveClass('btn btn-primary btn-lg test-class');
+    expect(element).toHaveClass('btn btn-primary btn-large test-class');
     expect(element.tagName).toEqual('BUTTON');
     expect(element.disabled).toBeFalsy();
     fireEvent.click(element);
